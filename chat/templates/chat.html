@@ -12,6 +12,7 @@
 
     <ul id="messages"></ul>
     <form id="chatbox">
+      {{.UserData.name}}:<br/>
       <textarea></textarea>
       <input type="submit" value="Send" />
     </form>
@@ -33,24 +34,24 @@
             return false;
           }
 
-          socket.send(msgBox.val());
+          socket.send(JSON.stringify({ "Message": msgBox.val()});
           msgBox.val("");
           return false;
 
-        });
+          });
 
-        if (!window["WebSocket"]) {
-          alert("Error: Your browser does not support web sockets.")
-        } else {
-          socket = new WebSocket("ws://{{.Host}}/room");
-          socket.onclose = function() {
-            alert("Connection has been closed.");
+          if (!window["WebSocket"]) {
+            alert("Error: Your browser does not support web sockets.")
+          } else {
+            socket = new WebSocket("ws://{{.Host}}/room");
+            socket.onclose = function() {
+              alert("Connection has been closed.");
+            }
+            socket.onmessage = function(e) {
+              var msg = eval("("+e.data+")");
+              messages.append( $("<li>").append( $("<strong>").text(msg.Name + ": "), $("<span>").text(msg.Message)) messages.append($("<li>").text(e.data));
+            }
           }
-          socket.onmessage = function(e) {
-            messages.append($("<li>").text(e.data));
-          }
-        }
-
       });
 
     </script>
