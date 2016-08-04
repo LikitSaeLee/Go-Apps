@@ -31,6 +31,8 @@ type room struct {
 	// tracer will receive trace information of activity
 	// in the room
 	tracer trace.Tracer
+	// avatar is how avatar information will be obtained
+	avatar Avatar
 }
 
 func newRoom() *room {
@@ -47,13 +49,13 @@ func (r *room) run() {
 	for {
 		select {
 		case client := <- r.join:
-		  r.clients[client] = true
+			r.clients[client] = true
 			r.tracer.Trace("New client joined")
 		case client := <- r.leave:
-		  r.clients[client] = false
+			r.clients[client] = false
 			r.tracer.Trace("Client left")
 		case msg := <- r.forward:
-		  // forward message to all clients
+			// forward message to all clients
 			for client := range r.clients {
 				select {
 				case client.send <- msg:

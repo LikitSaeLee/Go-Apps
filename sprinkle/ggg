@@ -1,0 +1,28 @@
+package main
+
+import (
+	"fmt"
+	"bufio"
+	"math/rand"
+	"strings"
+	"os"
+)
+
+const otherWord = "*"
+var transforms = []string{
+	"fun" + otherWord,
+	otherWord + "app",
+	otherWord + "site",
+	otherWord + "plural",
+	"get" + otherWord,
+	"lets" + otherWord,
+}
+func main() {
+	s := bufio.NewScanner(os.Stdin)
+	for s.Scan() {
+		rand_num := rand.Intn(len(transforms))
+		t := transforms[rand_num]
+		t = strings.Replace(t, otherWord, s.Text(), -1)
+		fmt.Println(t)
+	}
+}
